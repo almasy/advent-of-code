@@ -11,8 +11,8 @@ searching for some nice name) should provide following features:
 - [ ] Comprehensive documentation, so that other developers can use all
   the new & shiny features
 - [x] Common API for daily puzzle solutions
-- [ ] Unified way of running individual day solutions
-- [ ] A way of running all available (i.e. implemented) solutions for 
+- [x] Unified way of running individual day solutions
+- [x] A way of running all available (i.e. implemented) solutions for 
 the given AoC year
 - [ ] Ability to add new day puzzle solution template to the project
 - [ ] Ability to add new AoC year module / template to the project
@@ -128,12 +128,145 @@ of your choice.
 
 ## Running
 
-T.B.D.
+After a successful installation, type in the following command to see,
+which AoC days are available / ready to be run
+```shell
+./gradlew tasks --group aoc-2024
+```
+
+Each available / implemented day will have its own task.
+You can run any task of the ***aoc-2024*** group by simply typing
+`./gradlew <taskName>`. For example, to run `day03`, type
+
+```shell
+./gradlew :aoc-2024:day03
+```
+
+The `runAll` is a special task, which will run all
+implemented days (of the given AoC year) in a sequence.
+
+Each day can be started in one of the 3 modes. See
+the [Running Modes](#running-modes)
+chapter to find out, how to switch between them.
 
 ## Configuration
 
-T.B.D.
+The AoC-Kotlin "pico-framework" provides following configuration mechanisms:
+
+- Environment variables (starting with `AOC_` prefix)
+- JVM system properties (could be passed as command-line parameters)
+- Project properties (for AoC 2024, these are kept in the
+  [aoc-2024/src/main/resources/config.properties](./aoc-2024/src/main/resources/config.properties))
+
+The value of each particular configuration item is determined by checking 
+the possible sources for the first match in the following order
+
+1. System properties
+2. Environment variables
+3. Project properties
+4. Built-in fall-back values
+
+### Puzzle Input Data
+
+The project is configured to use bundled puzzle inputs taken from
+the official description of each particular day. The "full" puzzle
+inputs will never be part of the public repository, as this is against
+the [rules of the Advent of Code](https://adventofcode.com/2024/about).
+
+However, anyone can obtain their own set of "full" puzzle inputs by
+[logging-in](https://adventofcode.com/2024/auth/login).
+
+Puzzle input for each day **must** be saved into a text file with
+a name conforming to pattern `day<XY>.txt`, where the `<XY>` stands
+for the puzzle day number (padded with 0, if necessary).
+
+All puzzle input files must reside in the same directory. The name
+of the directory is specified by property `puzzle.input.root`
+(or its equivalent system variable `AOC_PUZZLE_INPUT_ROOT`).
+
+#### Example
+Let's assume all puzzle inputs are located in `C:\Users\AoC\2024\data`.
+In order to pass this location to the program via command line, type
+in following
+
+```shell
+./gradlew :aoc-2024:runAll -P"puzzle.input.root=C:\AoC\2024\data"
+```
+
+The same can be achieved by setting environment variable
+- Windows command prompt
+  `set AOC_PUZZLE_INPUT_ROOT=C:\Users\AoC\2024\data`
+- Windows Powershell
+  `$env:AOC_PUZZLE_INPUT_ROOT="C:\Users\AoC\2024\data"`
+- Bash / ZSH
+  `export AOC_PUZZLE_INPUT_ROOT="/home/AoC/2024/data"`
+
+### Running Modes
+
+Each day can be run in 3 different modes
+
+- `DEFAULT` will just perform the calculation and show the results
+  of both part 1 and part 2 of the given day.
+- `MEASURED` extends the DEFAULT mode functionality by measuring
+  and printing the duration of puzzle input loading and part 1 and
+  part 2 solutions.
+- `BENCHMARK` will run a micro-benchmark of puzzle input loading
+  and part 1 and part 2 solutions.
+
+The choice of a run-mode can be controlled via property `puzzle.run.mode`
+or environment variable `AOC_PUZZLE_RUN_MODE`.
+
+> [!NOTE]
+>
+> Values other than `DEFAULT`, `MEASURED` or `BENCHMARK`
+> are ignored (`DEFAULT` is used as a fall-back).
+
+### Example
+
+To run a benchmark of day07 type
+
+```shell
+./gradlew :aoc-2024:day07 -P"puzzle.run.mode=BENCHMARK"
+```
+
+### Benchmark Options
+
+The number of iterations each day puzzle solution is put through when
+running a benchmark can be modified via property `benchmark.iterations`
+or environment variable `AOC_BENCHMARK_ITERATIONS`. It can be set to any
+integer value from `2` upwards to `1 000 000` (one million).
+
+### Example
+```shell
+./gradlew :aoc-2024:day02 -P"puzzle.run.mode=BENCHMARK" -P"benchmark.iterations=5000"
+```
+
+Considering some daily puzzles could take over 1 second to execute,
+one has to be careful with the iterations limit (1 000 000 seconds =
+11 days, 13 hours and 46 minutes). However, other puzzle days can
+complete under 1 millisecond (1 000 000 milliseconds = 16 minutes,
+40 seconds). To address this disparity, the AoC project offers
+another benchmark related setting - a property `benchmark.limit.minutes`
+(or an environment variable `AOC_BENCHMARK_LIMIT_MINUTES`).
+This one allows to limit the total runtime of a benchmark to given
+amount of minutes.
+
+Accepted value range for the `benchmark.limit.minutes` is from `1` to `480`
+(i.e. 8 hours).
+
+### Example
+```shell
+./gradlew :aoc-2024:day06 -P"puzzle.run.mode=BENCHMARK" -P"benchmark.limit.minutes=1" -P"benchmark.iterations=5000"
+```
 
 ## Solution Overview
+
+T.B.D.
+
+### Project Structure
+
+T.B.D.
+
+### Gradle Plugin
 
 T.B.D.
