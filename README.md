@@ -25,7 +25,7 @@ README files for specific requirements and user / developer instructions.
 | [Day 5: Print Queue](https://adventofcode.com/2024/day/5) | [day05](./advent-of-code-kotlin/aoc-2024/src/main/kotlin/code/of/advent/day05/) | N/A |
 | [Day 6: Guard Gallivant](https://adventofcode.com/2024/day/6) | [day06](./advent-of-code-kotlin/aoc-2024/src/main/kotlin/code/of/advent/day06/) | N/A |
 | [Day 7: Bridge Repair](https://adventofcode.com/2024/day/7) | [day07](./advent-of-code-kotlin/aoc-2024/src/main/kotlin/code/of/advent/day07/) | N/A |
-| [Day 8: Resonant Collinearity](https://adventofcode.com/2024/day/8) | N/A | N/A |
+| [Day 8: Resonant Collinearity](https://adventofcode.com/2024/day/8) | [day08](./advent-of-code-kotlin/aoc-2024/src/main/kotlin/code/of/advent/day08/) | N/A |
 | [Day 9: Disk Fragmenter](https://adventofcode.com/2024/day/9) | N/A | N/A |
 | [Day 10: Hoof It](https://adventofcode.com/2024/day/10) | N/A | N/A |
 | [Day 11: Plutonian Pebbles](https://adventofcode.com/2024/day/11) | N/A | N/A |
