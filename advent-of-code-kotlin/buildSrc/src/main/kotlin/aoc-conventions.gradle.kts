@@ -2,7 +2,7 @@
  * Common settings for all Advent Of Code subprojects / modules
  */
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") // version is set trough libs.kotlin.gradle
     jacoco
 }
 
