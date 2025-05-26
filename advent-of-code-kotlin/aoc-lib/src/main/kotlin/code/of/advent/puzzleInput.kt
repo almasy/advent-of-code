@@ -3,7 +3,7 @@ package code.of.advent
 import java.io.File
 import java.io.IOException
 import kotlin.io.path.Path
-import kotlin.io.path.absolutePathString
+import kotlin.io.path.absolute
 
 /**
  * Exception expected to be thrown, if a problem
@@ -67,7 +67,7 @@ interface PuzzleInput<T> {
      * Override [day] to generate custom source file name
      */
     fun buildSourceWith(context: Context): String =
-        Path(context.inputRoot, "${day}.txt").normalize().absolutePathString()
+        Path(context.inputRoot, "${day}.txt").absolute().normalize().toString()
 
     private fun dayFromClass(): String =
         this::class.simpleName?.let { name ->

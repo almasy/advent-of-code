@@ -49,10 +49,15 @@ class PuzzleInputTest : ShouldSpec({
 
     context("PuzzleInput.buildSourceWith") {
         val puzzleContext = PropertyContext.from(
-            propertiesOf("./aoc/inputs", "DEFAULT", "2", "1")
+            propertiesOf(
+                inputRoot = "./aoc/inputs/dummy/path/../../",
+                runMode = "DEFAULT",
+                loops = "2",
+                limit = "1")
         )
         should("should build full path to puzzle input source") {
-            val expected = Path(puzzleContext.inputRoot, "day01.txt").normalize().absolutePathString()
+            // need to use Path to ensure compatibility across operating systems...
+            val expected = Path("./aoc/inputs", "day01.txt").normalize().absolutePathString()
             val actual = TestDay01Input().buildSourceWith(puzzleContext)
             actual shouldBe expected
         }
