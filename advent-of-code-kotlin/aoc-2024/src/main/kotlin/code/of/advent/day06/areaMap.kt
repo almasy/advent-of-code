@@ -4,7 +4,7 @@
  */
 package code.of.advent.day06
 
-import code.of.advent.PuzzleInputException
+import code.of.advent.PuzzleContentsException
 
 /**
  * @property x horizontal position (i.e. column)
@@ -94,7 +94,7 @@ class AreaMap(private val areaMap: List<List<Char>>) {
                 return Guard(Position(item.index, y), item.value.toDirection())
             }
         }
-        throw PuzzleInputException("No guard found on the map!")
+        throw PuzzleContentsException("No guard found on the map!")
     }
 
     private companion object {

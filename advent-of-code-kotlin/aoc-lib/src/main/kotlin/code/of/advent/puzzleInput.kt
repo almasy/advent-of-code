@@ -9,12 +9,46 @@ import kotlin.io.path.absolute
  * Exception expected to be thrown, if a problem
  * occurs during the puzzle loading and parsing
  * (e.g. given source doesn't exist, puzzle
- * format is invalid, etc.).
+ * format is invalid, etc.). This is a (abstract)
+ * parent of all AoC Puzzle Exceptions
+ */
+sealed class PuzzleException(
+    message: String,
+    source: Throwable?
+): Exception(message, source)
+
+/**
+ * Should be used when given file contains malformed puzzle input.
+ * @property fileName full name of puzzle source
+ * @param source original exception
+ */
+class PuzzleFormatException(
+    val fileName: String,
+    source: Throwable? = null
+) : PuzzleException("Puzzle in $fileName has invalid format", source)
+
+/**
+ * Should be used when an I/O error occurs during the parsing
+ * of the puzzle input file.
+ * @property fileName full name of puzzle source
+ * @param source original exception
  */
 class PuzzleInputException(
+    val fileName: String,
+    source: Throwable? = null
+) : PuzzleException("Failed to load puzzle from $fileName", source)
+
+/**
+ * Should be used when the puzzle input contains a logical error
+ * (i.e. format is OK, but a particular value is outside allowed
+ * range or even missing completely)
+ * @param message custom error message
+ * @param source original exception
+ */
+class PuzzleContentsException(
     message: String,
     source: Throwable? = null
-): Exception(message, source)
+) : PuzzleException(message, source)
 
 /**
  * Generic API specification for a puzzle input providers.
@@ -44,7 +78,7 @@ interface PuzzleInput<T> {
      * from given ([fileName]) and convert
      * it to a format [T] expected by the puzzle
      * solution.
-     * @throws PuzzleInputException
+     * @throws PuzzleException
      */
     fun loadFrom(fileName: String): T
 
@@ -53,7 +87,7 @@ interface PuzzleInput<T> {
      * input from the default [source] and convert
      * it to a format [T] expected by the puzzle
      * solution.
-     * @throws PuzzleInputException
+     * @throws PuzzleException
      */
     fun load(): T = loadFrom(source)
 
@@ -78,24 +112,24 @@ interface PuzzleInput<T> {
 /**
  * Helper calling the [block] providing it a new [File] instance
  * created with [fileName] passed as parameter, and converting
- * "well known" exceptions to [PuzzleInputException].
+ * "well known" exceptions to [PuzzleException].
  *
  * Current list of "well known" exceptions:
  * - [IOException]
  * - [NumberFormatException]
  * - [IndexOutOfBoundsException]
  * - [IllegalArgumentException]
- * @throws PuzzleInputException
+ * @throws PuzzleException
  */
 inline fun <T> runWithFile(fileName: String, block: (File) -> T): T =
     try {
         block(File(fileName))
     } catch (e: IOException) {
-        throw PuzzleInputException("Failed to load puzzle from $fileName", e)
+        throw PuzzleInputException(fileName, e)
     } catch (e: NumberFormatException) {
-        throw PuzzleInputException("Puzzle in $fileName has invalid format", e)
+        throw PuzzleFormatException(fileName, e)
     } catch (e: IndexOutOfBoundsException) {
-        throw PuzzleInputException("Puzzle in $fileName has invalid format", e)
+        throw PuzzleFormatException(fileName, e)
     } catch (e: IllegalArgumentException) {
-        throw PuzzleInputException("Puzzle in $fileName has invalid format", e)
+        throw PuzzleFormatException(fileName, e)
     }

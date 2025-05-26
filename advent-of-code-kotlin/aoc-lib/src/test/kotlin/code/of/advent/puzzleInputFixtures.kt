@@ -17,7 +17,7 @@ class Test20DayInput : InputTestBase()
 
 class FailingTest01Input : InputTestBase() {
     override fun loadFrom(fileName: String) =
-        throw PuzzleInputException("just a test")
+        throw PuzzleFormatException("just a test")
 }
 
 class TestInputExample : InputTestBase()

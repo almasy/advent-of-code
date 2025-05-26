@@ -23,20 +23,20 @@ class Day06InputTest : ShouldSpec({
         }
 
         should("throw exception for empty file").config(enabledIf = { Path(EMPTY_FILE).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day06Input(IntegrationContext).loadFrom(EMPTY_FILE)
             }.cause.shouldBeInstanceOf<IllegalArgumentException>()
         }
 
         val emptyLine = "$INPUT_ROOT/day06-empty.txt"
         should("throw exception for puzzle with empty line").config(enabledIf = { Path(emptyLine).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day06Input(IntegrationContext).loadFrom(emptyLine)
             }.cause.shouldBeInstanceOf<IllegalArgumentException>()
         }
 
         should("throw exception for puzzle without guard").config(enabledIf = { Path(NO_GUARD).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleContentsException> {
                 Day06Input(IntegrationContext).loadFrom(NO_GUARD)
             }.cause.shouldBeNull()
         }

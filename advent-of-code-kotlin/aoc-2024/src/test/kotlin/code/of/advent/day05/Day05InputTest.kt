@@ -22,21 +22,21 @@ class Day05InputTest : ShouldSpec({
         }
 
         should("throw exception for invalid puzzle format").config(enabledIf = { Path(GARBAGE_FILE).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day05Input(IntegrationContext).loadFrom(GARBAGE_FILE)
             }.cause.shouldBeInstanceOf<NumberFormatException>()
         }
 
         val badRule = "$INPUT_ROOT/day05-badrule.txt"
         should("throw exception for invalid rule").config(enabledIf = { Path(badRule).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day05Input(IntegrationContext).loadFrom(badRule)
             }.cause.shouldBeInstanceOf<IndexOutOfBoundsException>()
         }
 
         val badUpdate = "$INPUT_ROOT/day05-badupdate.txt"
         should("throw exception for empty page update").config(enabledIf = { Path(badUpdate).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day05Input(IntegrationContext).loadFrom(badUpdate)
             }.cause.shouldBeInstanceOf<NumberFormatException>()
         }

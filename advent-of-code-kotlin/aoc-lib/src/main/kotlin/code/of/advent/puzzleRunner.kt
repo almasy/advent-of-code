@@ -77,7 +77,7 @@ class PrintRunner<T, R>(
         }.onFailure { ex ->
             // TODO: log exception
             val message = when(ex::class) {
-                PuzzleInputException::class -> "\nFailed to load ${puzzle.day} input!"
+                PuzzleException::class -> "\nFailed to load ${puzzle.day} input!"
                 else -> "\nExecution of ${puzzle.day} failed due to an unexpected error!"
             }
             println(message)

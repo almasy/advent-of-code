@@ -22,14 +22,14 @@ class Day02InputTest : ShouldSpec({
         }
 
         should("throw exception for invalid puzzle format").config(enabledIf = { Path(GARBAGE_FILE).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day02Input(IntegrationContext).loadFrom(GARBAGE_FILE)
             }.cause.shouldBeInstanceOf<NumberFormatException>()
         }
 
         val badReport = "$INPUT_ROOT/day02-badreport.txt"
         should("throw exception for report with only one entry").config(enabledIf = { Path(badReport).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day02Input(IntegrationContext).loadFrom(badReport)
             }.cause.shouldBeInstanceOf<IllegalArgumentException>()
         }

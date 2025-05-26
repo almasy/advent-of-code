@@ -7,7 +7,7 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import java.io.FileNotFoundException
+import java.io.IOException
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
@@ -64,14 +64,20 @@ class PuzzleInputTest : ShouldSpec({
     }
 
     context("runWithFile") {
+        should("convert IOException to InputException") {
+            val exception = IOException()
+            shouldThrowExactly<PuzzleInputException> {
+                runWithFile("./does/not/matter.txt") { throw exception }
+            }.cause.shouldBeSameInstanceAs(exception)
+        }
+
         withData(
-            nameFn = { "should convert ${it::class.simpleName} to PuzzleInputException" },
-            FileNotFoundException(),
+            nameFn = { "should convert ${it::class.simpleName} to FormatException" },
             NumberFormatException(),
             IndexOutOfBoundsException(),
             IllegalArgumentException(),
         ) { exception ->
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 runWithFile("./does/not/matter.txt") { throw exception }
             }.cause.shouldBeSameInstanceAs(exception)
         }

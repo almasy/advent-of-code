@@ -22,7 +22,7 @@ class Day09InputTest : ShouldSpec({
         }
 
         should("throw exception for invalid puzzle format").config(enabledIf = { Path(GARBAGE_FILE).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day09Input(IntegrationContext).loadFrom(GARBAGE_FILE)
             }.cause.shouldBeInstanceOf<IllegalArgumentException>()
         }

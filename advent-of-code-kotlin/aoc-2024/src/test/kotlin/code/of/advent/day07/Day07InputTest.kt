@@ -22,7 +22,7 @@ class Day07InputTest : ShouldSpec({
         }
 
         should("throw exception for invalid puzzle format").config(enabledIf = { Path(GARBAGE_FILE).exists() }) {
-            shouldThrowExactly<PuzzleInputException> {
+            shouldThrowExactly<PuzzleFormatException> {
                 Day07Input(IntegrationContext).loadFrom(GARBAGE_FILE)
             }.cause.shouldBeInstanceOf<IndexOutOfBoundsException>()
         }
