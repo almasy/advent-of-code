@@ -1,22 +1,19 @@
 package code.of.advent
 
-import java.util.*
+import java.util.Properties
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 /**
- * - [DEFAULT] run [Puzzle.part1] & [Puzzle.part2] and provide
- * results.
+ * - [DEFAULT] run [Puzzle.part1] & [Puzzle.part2] and provide results.
  * - [MEASURED] measure duration of input loading ([PuzzleInput.load]),
  * [Puzzle.part1] and [Puzzle.part2], and then provide both results
  * and durations.
- * - [BENCHMARK] run a micro-benchmark of input loading
- * ([PuzzleInput.load]),
- * [Puzzle.part1] and [Puzzle.part2], and then provide results
- * and durations.
+ * - [BENCHMARK] run a micro-benchmark of input loading ([PuzzleInput.load]),
+ * [Puzzle.part1] and [Puzzle.part2], and then provide results and durations.
  *
- * See [PuzzleRunner.runWith].
+ * @see [PuzzleRunner.runWith].
  */
 enum class RunMode {
     DEFAULT,
@@ -25,44 +22,52 @@ enum class RunMode {
 }
 
 /**
- * Represents puzzle solution execution context.
- * @property benchmark see [PuzzleRunner.runWith]
- * @property inputRoot specifies a root folder of all
- * puzzle input files.
+ * Represents AoC puzzle solution execution context.
+ * @property input options specifying puzzle input source
  * @property runMode see [PuzzleRunner.runWith]
+ * @property benchmark see [PuzzleRunner.runWith]
  */
 interface Context {
-    val benchmark: Benchmark
-    val inputRoot: String
+    val input: Input
     val runMode: RunMode
+    val benchmark: Benchmark
+
+    /**
+     * Basic settings for puzzle input retrieval...
+     * @property root specifies a root folder of all puzzle input files
+     * @property session AOC session value (used to download puzzle input
+     * in case input file hasn't been found in the [root] folder).
+     */
+    data class Input(val root: String, val session: String?)
 
     /**
      * Benchmark specific settings...
      * @property loops number of iterations
+     * @property warmUp number of iterations before actual measurement
      * @property limit max. duration of the benchmark
      * @see [PuzzleRunner.runWith]
      */
-    data class Benchmark(val loops: Int, val limit: Duration)
+    data class Benchmark(val loops: Int, val warmUp: Int, val limit: Duration)
 }
 
 /**
  * Default AoC context. Use this one,
  * unless you need to achieve something
  * specific.
- * @property benchmark benchmark settings from [PropertyContext]
- * @property inputRoot puzzle input root folder from [PropertyContext]
+ * @property input puzzle input settings from [PropertyContext]
  * @property runMode run mode from [PropertyContext]
+ * @property benchmark benchmark settings from [PropertyContext]
  */
 object DefaultContext: Context {
-    override val benchmark: Context.Benchmark
-    override val inputRoot: String
+    override val input: Context.Input
     override val runMode: RunMode
+    override val benchmark: Context.Benchmark
 
     init {
         val default = PropertyContext.default()
-        benchmark = default.benchmark
-        inputRoot = default.inputRoot
+        input = default.input
         runMode = default.runMode
+        benchmark = default.benchmark
     }
 }
 
@@ -72,33 +77,56 @@ object DefaultContext: Context {
  * Use [PropertyContext.default] and [PropertyContext.from] factory
  * methods to create new instances.
  *
- * @property benchmark see [Context]
- * @property inputRoot see [Context]
+ * @property input see [Context]
  * @property runMode see [Context]
+ * @property benchmark see [Context]
  * @see DefaultContext
  */
 class PropertyContext
     internal constructor(
-        override val benchmark: Context.Benchmark,
-        override val inputRoot: String,
-        override val runMode: RunMode
+        override val input: Context.Input,
+        override val runMode: RunMode,
+        override val benchmark: Context.Benchmark
     ): Context
 {
     companion object {
         const val CONFIG_NAME = "config.properties"
-        private val RUN_MODE = Property<RunMode>(
-            "puzzle.run.mode", RunMode::valueOf, { true }, RunMode.DEFAULT
-        )
+
         private val INPUT_ROOT = Property<String>(
-            "puzzle.input.root", { it }, { it.isNotBlank() },
+            "puzzle.input.root",
+            { it },
+            { it.isNotBlank() },
             "./src/main/resources/inputs"
         )
-        private val BENCH_LOOPS = Property<Int>(
-            "benchmark.iterations", { it.toInt() }, { it in 2..1_000_000 }, 100
+        private val INPUT_SESSION = Property<String?>(
+            "puzzle.input.session",
+            { it },
+            { it?.isNotBlank() ?: false },
+            null
         )
-        private val BENCH_LIMIT = Property<Duration>(
-            "benchmark.limit.minutes", { it.toInt().minutes },
-            { it >= 1.minutes && it <= 8.hours }, 1.minutes
+        private val RUN_MODE = Property<RunMode>(
+            "puzzle.run.mode",
+            RunMode::valueOf,
+            { true },
+            RunMode.DEFAULT
+        )
+        private val BENCH_LOOPS = Property<Int>(
+            "benchmark.iterations",
+            { it.toInt() },
+            { it in 2..1_000_000 },
+            100
+        )
+        private val BENCH_WARMUP = Property<Int>(
+            "benchmark.warmup",
+            { it.toInt() },
+            { it in 0..100 },
+            1
+        )
+        private val BENCH_LIMIT_MINS = Property<Duration>(
+            "benchmark.limit.minutes",
+            { it.toInt().minutes },
+            { it >= 1.minutes && it <= 8.hours },
+            1.minutes
         )
 
         /**
@@ -125,13 +153,19 @@ class PropertyContext
             propertyFileName: String = CONFIG_NAME
         ): PropertyContext {
             val parser = PropertyParser(properties, variables, propertyFileName)
-            val loops = parser.extract(BENCH_LOOPS)
-            val limit = parser.extract(BENCH_LIMIT)
-
+            val benchmark = Context.Benchmark(
+                warmUp = parser.extract(BENCH_WARMUP),
+                loops = parser.extract(BENCH_LOOPS),
+                limit = parser.extract(BENCH_LIMIT_MINS)
+            )
+            val input = Context.Input(
+                root = parser.extract(INPUT_ROOT),
+                session = parser.extract(INPUT_SESSION)
+            )
             return PropertyContext(
-                Context.Benchmark(loops, limit),
-                parser.extract(INPUT_ROOT),
-                parser.extract(RUN_MODE)
+                input,
+                parser.extract(RUN_MODE),
+                benchmark
             )
         }
 

@@ -5,7 +5,12 @@ import org.gradle.api.tasks.JavaExec
  */
 abstract class AdventOfCodeTask: JavaExec() {
     private val customProperties = listOf(
-        "puzzle.input.root", "puzzle.run.mode", "benchmark.iterations", "benchmark.limit.minutes"
+        "puzzle.input.root",
+        "puzzle.input.session",
+        "puzzle.run.mode",
+        "benchmark.iterations",
+        "benchmark.warmup",
+        "benchmark.limit.minutes"
     )
 
     init {

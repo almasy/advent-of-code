@@ -67,7 +67,7 @@ interface PuzzleInput<T> {
      * Override [day] to generate custom source file name
      */
     fun buildSourceWith(context: Context): String =
-        Path(context.inputRoot, "${day}.txt").absolute().normalize().toString()
+        Path(context.input.root, "${day}.txt").absolute().normalize().toString()
 
     private fun dayFromClass(): String =
         this::class.simpleName?.let { name ->

@@ -51,7 +51,9 @@ class PuzzleInputTest : ShouldSpec({
         val puzzleContext = PropertyContext.from(
             propertiesOf(
                 inputRoot = "./aoc/inputs/dummy/path/../../",
+                inputSession = "",
                 runMode = "DEFAULT",
+                warmUp = "0",
                 loops = "2",
                 limit = "1")
         )
