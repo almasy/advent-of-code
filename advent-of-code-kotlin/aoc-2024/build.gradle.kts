@@ -11,5 +11,4 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     testImplementation(libs.kotest.runner.junit)
     testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.framework.datatest)
 }
