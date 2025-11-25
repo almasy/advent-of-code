@@ -43,7 +43,7 @@ private fun Duration.sign() = if (isNegative()) "-" else ""
  * Returns **absolute value**
  */
 private fun Duration.absRound(): Duration {
-    var duration = absoluteValue
+    val duration = absoluteValue
     if (duration.inWholeNanoseconds < 1_000) return duration
     val unit = when {
         duration.inWholeSeconds == 0L -> DurationUnit.NANOSECONDS
