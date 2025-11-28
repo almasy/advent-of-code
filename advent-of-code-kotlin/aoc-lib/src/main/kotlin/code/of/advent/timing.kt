@@ -11,6 +11,7 @@ typealias TimeMark = TimeSource.Monotonic.ValueTimeMark
  * Abstraction allowing to "shield" from
  * Kotlin's default time / duration measurement,
  * shall that be needed.
+ *
  */
 interface Timing {
     /**
@@ -35,6 +36,15 @@ interface Timing {
     fun now(): TimeMark
 }
 
+/**
+ * Prescription for a rather plain micro-benchmark. Please note,
+ * that this API by no means attempts to compete with stuff like
+ * [kotlinx-benchmark](https://github.com/Kotlin/kotlinx-benchmark).
+ *
+ * It only serves two purposes:
+ * - Provide approximate execution time of AoC puzzle solution
+ * - Run micro-benchmark without a complex setup / configuration
+ */
 interface PuzzleTiming: Timing {
     /**
      * Simple benchmarking for any [PuzzleInput.load]
@@ -55,7 +65,7 @@ interface PuzzleTiming: Timing {
         var duration = Duration.ZERO
         var i = 0
         do {
-            duration += measureTime { puzzleInput }
+            duration += measureTime { puzzleInput() }
         } while (++i < loops && now() < deadline)
 
         return (duration / i).toInputResult(i)
