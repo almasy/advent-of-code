@@ -35,7 +35,7 @@ class LetterMatrix(private val letterMatrix: List<List<Char>>) {
     }
 
     operator fun contains(position: Position) =
-        position.x >= 0 && position.x < sizeX && position.y >= 0 && position.y < sizeY
+        position.x in 0..<sizeX && position.y in 0..<sizeY
 
     /**
      * Helps to iterate through the [letterMatrix] by generating
