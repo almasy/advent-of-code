@@ -92,7 +92,7 @@ class PrintRunner<T, R>(
         println("Part1: ${part1.value}")
         val part2 = PuzzleResult.PartResult(puzzle.part2(input.load()))
         println("Part2: ${part2.value}")
-        return PuzzleResult<R>(part1, part2)
+        return PuzzleResult(part1, part2)
     }
 
     /**
