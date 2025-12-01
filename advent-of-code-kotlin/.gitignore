@@ -33,7 +33,7 @@ replay_pid*
 build
 
 # Make exception to include gradle-wrapper
-!gradle/wrapper/gradle-wrapper.jar
+!/gradle/wrapper/gradle-wrapper.jar
 
 # IntelliJ Idea
 .idea/
