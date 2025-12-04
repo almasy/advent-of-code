@@ -17,7 +17,7 @@ private val aocDays = AdventOfCodeDay.solvedDays(sourceSets["main"].kotlin, conf
 // Register & configure task for each of the found days
 aocDays.forEach { aocDay ->
     tasks.register<AdventOfCodeTask>(aocDay.day) {
-        description = "Runs Day ${aocDay.toNumber()} of the Advent of Code ${config.year.get()}"
+        description = "Runs Day ${aocDay.number} of the Advent of Code ${config.year.get()}"
         group = config.taskGroup.get()
         classpath = sourceSets["main"].runtimeClasspath
         mainClass = config.fullClassName(aocDay.day)
@@ -36,4 +36,13 @@ if (aocDays.isNotEmpty()) {
             }.sortedBy { it.name }
         )
     }
+}
+
+tasks.register<AdventOfCodeDayTask>("initDay") {
+    description = "Creates scaffolding for a new Advent of Code ${config.year.get()} day"
+    group = config.taskGroup.get()
+    root = projectDir
+    year = config.year.get()
+    classPackage = config.rootPackage.get()
+    fileName = config.sourceName.get()
 }
