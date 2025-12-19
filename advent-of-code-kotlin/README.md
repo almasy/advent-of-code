@@ -51,7 +51,7 @@ Consider yourself warned 😀
  project repository from the GitHub
 - Open terminal/command line and change active/working directory to `advent-of-code-kotlin`
   inside of the project root
-- Type `./gradlew aoc-2024:runAll`
+- Type `./gradlew :aoc-2024:runAll`
 - Wait until everything's downloaded, setup and compiled
 - Enjoy the show... (not that it's too much to look at)
 
@@ -88,7 +88,7 @@ using one of the tools, which make the installation and management
 - [SDKMAN!](https://sdkman.io/) - SDK manager for Unix systems
 - [Homebrew](https://brew.sh/) - package manager for macOS
 
-### Kotlin 2.1.x
+### Kotlin 2.3.x
 
 The aforementioned JDK 21 serves as a target platform, however all code
 has been written in Kotlin. Thanks to the fact the project is built via
@@ -97,7 +97,7 @@ Gradle, no explicit "Kotlin setup & installation" steps are necessary.
 ### Detailed Instructions
 
 All following steps should be performed from a terminal emulator running
-a shell (powershell, bash, zsh, etc.) or a command prompt (cmd.exe)
+a shell (PowerShell, bash, zsh, etc.) or a command prompt (cmd.exe)
 
 > [!NOTE]
 >

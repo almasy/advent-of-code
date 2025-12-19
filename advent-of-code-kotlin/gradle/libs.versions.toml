@@ -1,6 +1,6 @@
 
 [versions]
-kotlin-gradle = "2.2.21"
+kotlin-gradle = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 kotest-runner-junit5 = "6.0.5"
 kotest-assertions-core = "6.0.5"
