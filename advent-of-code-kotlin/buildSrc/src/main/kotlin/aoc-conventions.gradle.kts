@@ -1,5 +1,5 @@
 /**
- * Common settings for all Advent Of Code subprojects / modules
+ * Common settings for all Advent Of Code Kotlin subprojects / modules
  */
 plugins {
     kotlin("jvm") // version is set trough libs.kotlin.gradle
@@ -13,11 +13,11 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.15"
 }
 
 tasks.named<Test>("test") {
