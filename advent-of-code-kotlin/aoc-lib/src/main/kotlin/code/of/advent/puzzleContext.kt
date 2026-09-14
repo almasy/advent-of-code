@@ -5,6 +5,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
+import code.of.advent.logging.LoggerFactory
+
 /**
  * - [DEFAULT] run [Puzzle.part1] & [Puzzle.part2] and provide results.
  * - [MEASURED] measure duration of input loading ([PuzzleInput.load]),
@@ -209,8 +211,10 @@ private class PropertyParser(
         return try {
             val propValue = property.converter(rawValue as String)
             if (property.validator(propValue)) propValue else property.defaultValue
-        } catch (_: Exception) {
-            // TODO: log warning
+        } catch (ex: Exception) {
+            logger.warn(ex) {
+                "Failed to obtain property \"${property.propId}\". Using default value."
+            }
             property.defaultValue
         }
     }
@@ -221,8 +225,12 @@ private class PropertyParser(
                 .getResourceAsStream(propertyFileName).use {
                     Properties().apply { load(it) }
                 }
-        } catch (_: Exception) {
-            //TODO: log warning
+        } catch (ex: Exception) {
+            logger.warn(ex) { "Failed ot load property file \"$propertyFileName\"." }
             Properties()
         }
+
+    private companion object {
+        private val logger = LoggerFactory.logger { }
+    }
 }

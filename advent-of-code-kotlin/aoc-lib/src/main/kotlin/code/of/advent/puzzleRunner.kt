@@ -1,5 +1,7 @@
 package code.of.advent
 
+import code.of.advent.logging.LoggerFactory
+
 /**
  * Simple API specifying a unified way of puzzle solution (see [Puzzle])
  * executions.
@@ -75,7 +77,7 @@ class PrintRunner<T, R>(
                 RunMode.BENCHMARK -> runBenchmark(context.benchmark)
             }
         }.onFailure { ex ->
-            // TODO: log exception
+            logger.error(ex) { "Execution of puzzle \"${puzzle.day}\" failed with an error!" }
             val message = when(ex::class) {
                 PuzzleInputException::class -> "\nFailed to load ${puzzle.day} input!"
                 else -> "\nExecution of ${puzzle.day} failed due to an unexpected error!"
@@ -157,5 +159,9 @@ class PrintRunner<T, R>(
             println("Runtime exceeded maximal allowed duration!")
             print("Terminating after $actual iteration${plural}... ")
         }
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.logger { }
     }
 }
