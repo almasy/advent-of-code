@@ -12,7 +12,7 @@ import kotlin.time.TimedValue
  * @see Puzzle
  * @see PuzzleRunner
  */
-data class PuzzleResult<T>(
+public data class PuzzleResult<T>(
     val part1: PartResult<T>,
     val part2: PartResult<T>,
     val input: InputResult = InputResult(),
@@ -26,7 +26,7 @@ data class PuzzleResult<T>(
      * @property <T> type of the day's solution result
      * @see Puzzle
      */
-    data class PartResult<T>(
+    public data class PartResult<T>(
         val value: T,
         val duration: Duration = Duration.ZERO,
         val loops: Int = 1)
@@ -37,7 +37,7 @@ data class PuzzleResult<T>(
      * @property duration duration of calculation (if measured)
      * @property loops number of iterations (input load calls) performed
      */
-    data class InputResult(
+    public data class InputResult(
         val duration: Duration = Duration.ZERO,
         val loops: Int = 1)
 }
@@ -45,11 +45,11 @@ data class PuzzleResult<T>(
 /**
  * Convenience conversion function
  */
-fun <T> TimedValue<T>.toPartResult(loops: Int = 1): PuzzleResult.PartResult<T> =
+internal fun <T> TimedValue<T>.toPartResult(loops: Int = 1): PuzzleResult.PartResult<T> =
     PuzzleResult.PartResult(this.value, this.duration, loops)
 
 /**
  * Convenience conversion function
  */
-fun Duration.toInputResult(loops: Int = 1): PuzzleResult.InputResult =
+internal fun Duration.toInputResult(loops: Int = 1): PuzzleResult.InputResult =
     PuzzleResult.InputResult(this, loops)

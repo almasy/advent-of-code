@@ -11,7 +11,7 @@ import kotlin.io.path.absolute
  * (e.g. given source doesn't exist, puzzle
  * format is invalid, etc.).
  */
-class PuzzleInputException(
+public class PuzzleInputException(
     message: String,
     source: Throwable? = null
 ): Exception(message, source)
@@ -22,21 +22,21 @@ class PuzzleInputException(
  * @property day name of the AoC day class implementing
  * [PuzzleInput] belongs to.
  */
-interface PuzzleInput<T> {
+public interface PuzzleInput<T> {
     /**
      * Default source of "raw" puzzle data. Make
      * sure to set this value, in order to adjust,
      * from where the [load] method reads the puzzle
      * data.
      */
-    val source: String
+    public val source: String
 
     /**
      * Extracts the "day number" (e.g. "day07") from the
      * name of the class. This means the class must conform
      * to the naming convention, or must override this value.
      */
-     val day: String
+     public val day: String
         get() = dayFromClass()
 
     /**
@@ -46,7 +46,7 @@ interface PuzzleInput<T> {
      * solution.
      * @throws PuzzleInputException
      */
-    fun loadFrom(fileName: String): T
+    public fun loadFrom(fileName: String): T
 
     /**
      * Implementation, if provided, must load puzzle
@@ -55,7 +55,7 @@ interface PuzzleInput<T> {
      * solution.
      * @throws PuzzleInputException
      */
-    fun load(): T = loadFrom(source)
+    public fun load(): T = loadFrom(source)
 
     /**
      * Helper composing full path to a puzzle source file
@@ -71,7 +71,7 @@ interface PuzzleInput<T> {
 
     private fun dayFromClass(): String =
         this::class.simpleName?.let { name ->
-            "Day\\d+".toRegex().find(name)?.value?.lowercase()
+            "Day\\d{1,2}".toRegex().find(name)?.value?.lowercase()
         } ?: throw IllegalStateException("Can't parse day from: ${this::class.simpleName}")
 }
 
@@ -87,7 +87,7 @@ interface PuzzleInput<T> {
  * - [IllegalArgumentException]
  * @throws PuzzleInputException
  */
-inline fun <T> runWithFile(fileName: String, block: (File) -> T): T =
+public inline fun <T> runWithFile(fileName: String, block: (File) -> T): T =
     try {
         block(File(fileName))
     } catch (e: IOException) {

@@ -17,7 +17,7 @@ import code.of.advent.logging.LoggerFactory
  *
  * @see [PuzzleRunner.runWith].
  */
-enum class RunMode {
+public enum class RunMode {
     DEFAULT,
     MEASURED,
     BENCHMARK,
@@ -29,10 +29,10 @@ enum class RunMode {
  * @property runMode see [PuzzleRunner.runWith]
  * @property benchmark see [PuzzleRunner.runWith]
  */
-interface Context {
-    val input: Input
-    val runMode: RunMode
-    val benchmark: Benchmark
+public interface Context {
+    public val input: Input
+    public val runMode: RunMode
+    public val benchmark: Benchmark
 
     /**
      * Basic settings for puzzle input retrieval...
@@ -40,7 +40,7 @@ interface Context {
      * @property session AOC session value (used to download puzzle input
      * in case input file hasn't been found in the [root] folder).
      */
-    data class Input(val root: String, val session: String?)
+    public data class Input(val root: String, val session: String?)
 
     /**
      * Benchmark specific settings...
@@ -49,7 +49,7 @@ interface Context {
      * @property limit max. duration of the benchmark
      * @see [PuzzleRunner.runWith]
      */
-    data class Benchmark(val loops: Int, val warmUp: Int, val limit: Duration)
+    public data class Benchmark(val loops: Int, val warmUp: Int, val limit: Duration)
 }
 
 /**
@@ -60,7 +60,7 @@ interface Context {
  * @property runMode run mode from [PropertyContext]
  * @property benchmark benchmark settings from [PropertyContext]
  */
-object DefaultContext: Context {
+public object DefaultContext: Context {
     override val input: Context.Input
     override val runMode: RunMode
     override val benchmark: Context.Benchmark
@@ -84,47 +84,47 @@ object DefaultContext: Context {
  * @property benchmark see [Context]
  * @see DefaultContext
  */
-class PropertyContext
+public class PropertyContext
     internal constructor(
         override val input: Context.Input,
         override val runMode: RunMode,
         override val benchmark: Context.Benchmark
     ): Context
 {
-    companion object {
-        const val CONFIG_NAME = "config.properties"
+    public companion object {
+        private const val CONFIG_NAME = "config.properties"
 
-        private val INPUT_ROOT = Property<String>(
+        private val INPUT_ROOT = Property(
             "puzzle.input.root",
             { it },
             { it.isNotBlank() },
             "./src/main/resources/inputs"
         )
-        private val INPUT_SESSION = Property<String?>(
+        private val INPUT_SESSION = Property(
             "puzzle.input.session",
             { it },
             { it?.isNotBlank() ?: false },
             null
         )
-        private val RUN_MODE = Property<RunMode>(
+        private val RUN_MODE = Property(
             "puzzle.run.mode",
             RunMode::valueOf,
             { true },
             RunMode.DEFAULT
         )
-        private val BENCH_LOOPS = Property<Int>(
+        private val BENCH_LOOPS = Property(
             "benchmark.iterations",
             { it.toInt() },
             { it in 2..1_000_000 },
             100
         )
-        private val BENCH_WARMUP = Property<Int>(
+        private val BENCH_WARMUP = Property(
             "benchmark.warmup",
             { it.toInt() },
             { it in 0..100 },
             1
         )
-        private val BENCH_LIMIT_MINS = Property<Duration>(
+        private val BENCH_LIMIT_MINS = Property(
             "benchmark.limit.minutes",
             { it.toInt().minutes },
             { it >= 1.minutes && it <= 8.hours },
@@ -136,7 +136,7 @@ class PropertyContext
          * from the default sources (system properties, environment variables,
          * app property file or fall-back defaults).
          */
-        fun default() = from()
+        public fun default(): PropertyContext = from()
 
         /**
          * Factory method which creates new [PropertyContext] instance
@@ -149,7 +149,7 @@ class PropertyContext
          * @param variables any Map<String, String> (by default System environment variables)
          * @param propertyFileName properties loaded from given file name
          */
-        fun from(
+        public fun from(
             properties: Properties = systemProperties(),
             variables: Map<String, String> = systemEnv(),
             propertyFileName: String = CONFIG_NAME

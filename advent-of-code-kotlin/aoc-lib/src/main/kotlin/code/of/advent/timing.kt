@@ -5,7 +5,7 @@ import kotlin.time.TimeSource
 import kotlin.time.TimedValue
 
 /** The full name [TimeSource.Monotonic.ValueTimeMark] is just too long... */
-typealias TimeMark = TimeSource.Monotonic.ValueTimeMark
+internal typealias TimeMark = TimeSource.Monotonic.ValueTimeMark
 
 /**
  * Abstraction allowing to "shield" from
@@ -13,27 +13,27 @@ typealias TimeMark = TimeSource.Monotonic.ValueTimeMark
  * shall that be needed.
  *
  */
-interface Timing {
+public interface Timing {
     /**
      * Implementation should measure a duration of given
      * code block and then return it together with the result
      * of the called block, all wrapped in [TimedValue].
      * @param block block of code to be measured
      */
-    fun <T> measureTimedValue(block: () -> T): TimedValue<T>
+    public fun <T> measureTimedValue(block: () -> T): TimedValue<T>
 
     /**
      * Implementation should measure a duration of given
      * code block and return as [Duration]
      * @param block block of code to be measured
      */
-    fun measureTime(block: () -> Unit): Duration
+    public fun measureTime(block: () -> Unit): Duration
 
     /**
      * Implementation should provide a [TimeMark] value
      * denoting "timestamp" of the current moment.
      */
-    fun now(): TimeMark
+    public fun now(): TimeMark
 }
 
 /**
@@ -45,7 +45,7 @@ interface Timing {
  * - Provide approximate execution time of AoC puzzle solution
  * - Run micro-benchmark without a complex setup / configuration
  */
-interface PuzzleTiming: Timing {
+public interface PuzzleTiming: Timing {
     /**
      * Simple benchmarking for any [PuzzleInput.load]
      * implementation.
@@ -57,7 +57,7 @@ interface PuzzleTiming: Timing {
      *                 iterations.
      * @return result of benchmark stored in [PuzzleResult.InputResult]
      */
-    fun <T> runBenchmark(
+    public fun <T> runBenchmark(
         puzzleInput: () -> T,
         loops: Int,
         deadline: TimeMark
@@ -83,7 +83,7 @@ interface PuzzleTiming: Timing {
      *                 stop without completing all iterations.
      * @return result of benchmark stored in [PuzzleResult.PartResult]
      */
-    fun <T, R> runBenchmark(
+    public fun <T, R> runBenchmark(
         puzzlePart: (T) -> R,
         puzzleInput: () -> T,
         loops: Int,
@@ -107,7 +107,7 @@ interface PuzzleTiming: Timing {
  * one unless you want to achieve something
  * very particular.
  */
-object MonotonicTiming: PuzzleTiming {
+public object MonotonicTiming: PuzzleTiming {
     /**
      * Uses default Kotlin's way of measuring duration
      * of a code block execution

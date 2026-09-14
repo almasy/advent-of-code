@@ -16,10 +16,10 @@ import code.of.advent.logging.LoggerFactory
  * @property timing used for code duration measurement
  * to measure, how long a block of code runs.
  */
-interface PuzzleRunner<T, R> {
-    val input: PuzzleInput<T>
-    val puzzle: Puzzle<T, R>
-    val timing: PuzzleTiming
+public interface PuzzleRunner<T, R> {
+    public val input: PuzzleInput<T>
+    public val puzzle: Puzzle<T, R>
+    public val timing: PuzzleTiming
 
     /**
      * Implementation is expected to run given [puzzle] solution
@@ -40,7 +40,7 @@ interface PuzzleRunner<T, R> {
      * @return result obtained by running both [puzzle] parts as well as
      * the [input].
      */
-    fun runWith(context: Context): Result<PuzzleResult<R>>
+    public fun runWith(context: Context): Result<PuzzleResult<R>>
 }
 
 /**
@@ -55,7 +55,7 @@ interface PuzzleRunner<T, R> {
  * @property puzzle puzzle solver implementation
  * @property timing see [PuzzleRunner]
  */
-class PrintRunner<T, R>(
+public class PrintRunner<T, R>(
     override val input: PuzzleInput<T>,
     override val puzzle: Puzzle<T, R>,
     override val timing: PuzzleTiming = MonotonicTiming,

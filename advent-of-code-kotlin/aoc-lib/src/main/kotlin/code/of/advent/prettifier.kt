@@ -20,7 +20,7 @@ import kotlin.time.DurationUnit
  * - Durations under one second but over one microsecond include millis and micros (as fraction)
  * - Durations under one microsecond are simply shown as nanoseconds
  */
-fun Duration.toPrettyString(): String =
+internal fun Duration.toPrettyString(): String =
     absRound().toComponents { days, hours, minutes, seconds, nanos ->
         listOf(
             days withUnit "d",
